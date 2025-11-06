@@ -12,7 +12,7 @@ const controllers = require('../controllers/user');
 router.get('/',controllers.all);
 router.post('/',controllers.add);
 router.patch('/',controllers.edit);
-router.delete('/:name',controllers.deleteUser);
+router.delete('/:id',controllers.deleteUser);
 
 // router.post('/',(req,res) => {
 //   let newUser = req.body;
