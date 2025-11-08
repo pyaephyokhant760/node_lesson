@@ -4,7 +4,10 @@ const db = require('../utils/db').getDB();
 
 
 const all = (req, res) => {
-  db.collection('products').find().toArray()
+  db.collection('products')
+  // .find().project({ name : 1, _id: 0 }).toArray()
+    // .find({age:{$eq:12}}).toArray()
+    .find({age:{$nin:[12,17]}}).toArray()
     .then(users => {
       res.json({ con: true, msg: "User List", result: { data: users } });
     })
@@ -16,7 +19,7 @@ const all = (req, res) => {
 const add = (req, res) => {
   let userData = req.body;
   userData.created = new Date();
-  db.collection('products').insertOne(userData)
+  db.collection('products').insertMany(req.body.product)
     .then(result => {
       res.status(201).json({ con: true, msg: "User added successfully", result: { data: result } });
     })
@@ -28,8 +31,9 @@ const add = (req, res) => {
 const edit = (req, res, next) => {
     
     let updateData = req.body;
-    let id = ObjectId.createFromHexString(req.params.id);
-    db.collection('products').updateOne({ _id:id  }, { $set: updateData })
+    let age = parseFloat(req.params.age);
+    // let id = ObjectId.createFromHexString(req.params.id);
+    db.collection('products').updateMany({ age:age  }, { $set: updateData })
       .then(result => {
         res.json({ con: true, msg: "Product Updated", result: { data: result } });
       })
@@ -39,8 +43,9 @@ const edit = (req, res, next) => {
 }
 
 const deleteProduct = (req, res, next) => {
-    let id = ObjectId.createFromHexString(req.params.id);
-    db.collection('products').deleteOne({ _id: id })
+    // let id = ObjectId.createFromHexString(req.params.id);
+    let age = parseFloat(req.params.age);
+    db.collection('products').deleteMany({ age: age })
       .then(result => {
         res.json({ con: true, msg: "Product Deleted", result: { data: result } });
       })
