@@ -7,7 +7,9 @@ const all = (req, res) => {
   db.collection('products')
   // .find().project({ name : 1, _id: 0 }).toArray()
     // .find({age:{$eq:12}}).toArray()
-    .find({age:{$nin:[12,17]}}).toArray()
+    // .find({name:{$regex:/^Khit/}}).toArray()
+    // .find({$where:"this.age >12 && this.age <13"}).toArray()
+     .find().toArray()
     .then(users => {
       res.json({ con: true, msg: "User List", result: { data: users } });
     })
@@ -31,9 +33,9 @@ const add = (req, res) => {
 const edit = (req, res, next) => {
     
     let updateData = req.body;
-    let age = parseFloat(req.params.age);
-    // let id = ObjectId.createFromHexString(req.params.id);
-    db.collection('products').updateMany({ age:age  }, { $set: updateData })
+    // let age = parseFloat(req.params.age);
+    let id = ObjectId.createFromHexString(req.params.id);
+    db.collection('products').updateMany({ _id:id  }, { $addToSet: {age: updateData} })
       .then(result => {
         res.json({ con: true, msg: "Product Updated", result: { data: result } });
       })
