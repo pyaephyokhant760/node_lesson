@@ -21,7 +21,7 @@ const all = (req, res) => {
 const add = (req, res) => {
   let userData = req.body;
   userData.created = new Date();
-  db.collection('products').insertMany(req.body.product)
+  db.collection('products').insertOne(userData)
     .then(result => {
       res.status(201).json({ con: true, msg: "User added successfully", result: { data: result } });
     })
@@ -34,8 +34,13 @@ const edit = (req, res, next) => {
     
     let updateData = req.body;
     // let age = parseFloat(req.params.age);
-    let id = ObjectId.createFromHexString(req.params.id);
-    db.collection('products').updateMany({ _id:id  }, { $addToSet: {age: updateData} })
+    let name = req.params.name;
+    // let id = ObjectId.createFromHexString(req.params.id);
+    db.collection('products')
+    // .updateMany({ _id:id  }, { $addToSet: {age: updateData} })
+    // .updateOne({ _id:id  }, { $currentDate: {created: true} })
+    // .updateOne({ }, { $rename: {created: "updated"} })
+    .updateOne({ name }, { $set: req.body } , { upsert: true })
       .then(result => {
         res.json({ con: true, msg: "Product Updated", result: { data: result } });
       })
@@ -55,4 +60,11 @@ const deleteProduct = (req, res, next) => {
         res.status(500).json({ con: false, msg: "Error deleting product", error: err });
       });
 };
-module.exports = { all, add , edit , deleteProduct };
+
+const aggre = (req, res) => {
+  // db.collection('products')
+  //   .aggregate([
+
+  //   ])
+}
+module.exports = { all, add , edit , deleteProduct , aggre };

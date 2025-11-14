@@ -5,8 +5,9 @@ const controllers = require('../controllers/product');
 
 router.get('/',controllers.all);
 router.post('/',controllers.add);
-router.patch('/:id',controllers.edit);
-router.delete('/:id',controllers.deleteProduct);
+router.patch('/:name',controllers.edit);
+router.delete('/:name',controllers.deleteProduct);
+router.get('/aggre',controllers.aggre);
 
 
 
